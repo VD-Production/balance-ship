@@ -277,7 +277,7 @@ h2 { font-size: clamp(2rem, 3.05vw, 3.15rem); font-weight: 670; line-height: 1.0
   width: calc(100% - clamp(4.5rem, 9vw, 7.2rem));
   margin-inline: auto;
   display: grid;
-  grid-template-columns: 1.08fr 1fr 1.15fr 1fr;
+  grid-template-columns: repeat(4, minmax(0, auto));
   padding: 1px;
   border: 1px solid var(--line);
   border-radius: 100vmax;
@@ -292,10 +292,13 @@ h2 { font-size: clamp(2rem, 3.05vw, 3.15rem); font-weight: 670; line-height: 1.0
   gap: 0.78rem;
   min-width: 0;
   min-height: 2.88rem;
+  padding: 0.3rem 0.875rem;
   border: 1px solid transparent;
   border-radius: 100vmax;
   font-weight: 530;
   line-height: 1.16;
+  text-align: center;
+  overflow-wrap: anywhere;
   transition: box-shadow 180ms, color 180ms, background-color 180ms;
 }
 .tab-list button + button::before {
@@ -521,13 +524,17 @@ body:has(.dialog[open]) { overflow: hidden; }
   .steps li { letter-spacing: -0.009em; }
 }
 
+@media (max-width: 1180px) {
+  .tab-list button { gap: 0.55rem; padding-inline: 0.65rem; font-size: 0.9rem; }
+}
+
 @media (max-width: 1150px) {
   .support-break { display: none; }
 }
 
 @media (max-width: 1050px) {
   .tab-list { width: calc(100% - 4.5rem); }
-  .tab-list button { gap: 0.38rem; font-size: 0.9rem; padding-inline: 0.35rem; }
+  .tab-list :is(img, .icon) { width: 1.5rem; height: 1.5rem; }
   .showcase-frame { padding-inline: 2.6rem; }
   .tab-panel { gap: 1.35rem; }
   .wide-break { display: none; }
@@ -574,6 +581,13 @@ body:has(.dialog[open]) { overflow: hidden; }
   .contacts address { grid-template-columns: max-content max-content; gap: clamp(1.5rem, 7vw, 4rem); padding-left: 0; border: 0; }
 }
 
+@media (max-width: 720px) {
+  .tab-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.18rem; padding: 0.25rem; border-radius: 1rem; }
+  .tab-list button { min-height: 2.75rem; justify-content: flex-start; gap: 0.48rem; padding-inline: 0.65rem; border-radius: 0.7rem; text-align: left; font-size: 0.84rem; }
+  .tab-list button + button::before { display: none; }
+  .showcase-frame { margin-top: 0.5rem; }
+}
+
 @media (max-width: 580px) {
   .hero { min-height: max(45.5rem, 100svh); }
   .hero-inner { padding-block: clamp(6.6rem, 16svh, 9.25rem) 1.5rem; gap: clamp(8.5rem, 38vw, 12rem); }
@@ -600,10 +614,7 @@ body:has(.dialog[open]) { overflow: hidden; }
   .section-description { font-size: 1rem; line-height: 1.44; }
   .product .section-description { line-height: 1.44; }
   .showcase-track { margin-top: 1.3rem; }
-  .tab-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.18rem; padding: 0.25rem; border-radius: 1rem; }
-  .tab-list button { min-height: 2.75rem; justify-content: flex-start; gap: 0.48rem; padding-inline: 0.52rem; border-radius: 0.7rem; text-align: left; font-size: 0.84rem; }
-  .tab-list button + button::before { display: none; }
-  .showcase-frame { margin-top: 0.5rem; padding: 0.875rem; border-radius: 1.12rem; }
+  .showcase-frame { padding: 0.875rem; border-radius: 1.12rem; }
   .tab-panel { grid-template-columns: 1fr; gap: 0.85rem; }
   .panel-copy h3 { font-size: 1.28rem; line-height: 1.13; }
   .panel-copy > p { margin-top: 0.5rem; }
@@ -639,6 +650,11 @@ body:has(.dialog[open]) { overflow: hidden; }
   .contacts a { width: fit-content; }
   .site-footer { flex-direction: column; }
   .legal-links { gap: 0.5rem 0.8rem; }
+}
+
+@media (max-width: 360px) {
+  .tab-list button { gap: 0.36rem; padding-inline: 0.55rem; }
+  .tab-list :is(img, .icon) { width: 1.05rem; height: 1.05rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
