@@ -1,3 +1,9 @@
+const pageUrl = new URL(window.location.href);
+if (pageUrl.searchParams.get('__pages_redirect') === '1') {
+  pageUrl.searchParams.delete('__pages_redirect');
+  window.history.replaceState(window.history.state, '', pageUrl.href);
+}
+
 const header = document.querySelector('.site-header');
 const nav = document.querySelector('.site-nav');
 const navToggle = document.querySelector('.nav-toggle');
