@@ -3,6 +3,8 @@ const nav = document.querySelector('.site-nav');
 const navToggle = document.querySelector('.nav-toggle');
 const navLinks = [...nav.querySelectorAll('a')];
 const sections = navLinks.map((link) => document.querySelector(link.hash));
+const projectSection = document.getElementById('project');
+const contactsSection = document.getElementById('contacts');
 const mobile = window.matchMedia('(max-width: 800px)');
 
 function setMenuOpen(open) {
@@ -30,18 +32,28 @@ let navigationFrame = 0;
 
 function updateNavigation() {
   navigationFrame = 0;
-  header.classList.toggle('is-scrolled', window.scrollY > 12);
+  const scrollTop = window.scrollY;
+  const viewportHeight = window.innerHeight;
+  const headerHeight = header.offsetHeight;
+  const readingLine = headerHeight + Math.min(125, viewportHeight * 0.18);
+  const maxScrollTop = document.documentElement.scrollHeight - viewportHeight;
+  const sectionInterval = Math.min(80, viewportHeight * 0.1);
+  const projectTop = projectSection.getBoundingClientRect().top + scrollTop;
+  const contactsTop = contactsSection.getBoundingClientRect().top + scrollTop;
 
-  const readingLine = header.offsetHeight + Math.min(125, window.innerHeight * 0.18);
-  let current = sections.findLastIndex((section) => section.getBoundingClientRect().top <= readingLine);
-  const reachedEnd = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 3;
+  // Reserve a scroll interval for both sections even if their headings cannot reach the header.
+  const contactsStart = Math.min(contactsTop - readingLine, maxScrollTop - sectionInterval);
+  const projectStart = Math.min(projectTop - readingLine, contactsStart - sectionInterval);
+  const projectAnchor = Math.min(projectTop - headerHeight, contactsStart - sectionInterval / 2);
 
-  if (reachedEnd) {
-    const requested = navLinks.findIndex((link) => link.hash === window.location.hash);
-    const requestedPosition = sections[requested]?.getBoundingClientRect();
-    current = requestedPosition?.bottom > readingLine ? requested : sections.length - 1;
-  }
+  const current = sections.findLastIndex((section) => {
+    if (section === contactsSection) return scrollTop >= contactsStart;
+    if (section === projectSection) return scrollTop >= projectStart;
+    return section.getBoundingClientRect().top <= readingLine;
+  });
 
+  header.classList.toggle('is-scrolled', scrollTop > 12);
+  projectSection.style.scrollMarginTop = `${Math.ceil(projectTop - projectAnchor)}px`;
   navLinks.forEach((link, index) => {
     if (index === current) link.setAttribute('aria-current', 'location');
     else link.removeAttribute('aria-current');
@@ -56,7 +68,8 @@ window.addEventListener('scroll', scheduleNavigationUpdate, { passive: true });
 window.addEventListener('resize', scheduleNavigationUpdate);
 window.addEventListener('hashchange', scheduleNavigationUpdate);
 window.addEventListener('load', scheduleNavigationUpdate);
-scheduleNavigationUpdate();
+new ResizeObserver(scheduleNavigationUpdate).observe(projectSection.parentElement);
+updateNavigation();
 
 const breathing = document.querySelector('[data-breathing]');
 const breathButton = breathing.querySelector('.breath-button');
