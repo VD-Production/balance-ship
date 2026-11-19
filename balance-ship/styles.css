@@ -196,9 +196,9 @@ section[id], main[id] { scroll-margin-top: var(--header-height); }
   background-color: rgb(12 68 82 / 90%);
   box-shadow: inset 0 0 20px #22dff663, 0 0 22px #2ae4f25a;
 }
-.intro-button { min-height: 3.5rem; margin-top: 2.1rem; padding: 0.7rem 2.3rem; gap: 1.2rem; font-size: 1.13rem; font-weight: 560; }
-.intro-button .icon { width: 1.65rem; height: 1.65rem; color: var(--aqua); filter: drop-shadow(0 0 6px #44e9fa80); }
-.intro-button span { border-left: 1px solid var(--line); padding-left: 1.23rem; }
+.hero-button { min-height: 3.5rem; margin-top: 2.1rem; padding: 0.7rem 2.3rem; gap: 1.2rem; font-size: 1.13rem; font-weight: 560; }
+.hero-button .icon { width: 1.65rem; height: 1.65rem; color: var(--aqua); filter: drop-shadow(0 0 6px #44e9fa80); }
+.hero-button span { border-left: 1px solid var(--line); padding-left: 1.23rem; }
 
 .support {
   width: 100%;
@@ -515,8 +515,9 @@ h2 { font-size: clamp(2rem, 3.05vw, 3.15rem); font-weight: 670; line-height: 1.0
   border-block: 1px solid var(--line);
 }
 .contacts h2 { text-wrap: initial; }
-.contacts address { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1rem, 3.3vw, 3.5rem); border-left: 1px solid var(--line); padding-left: clamp(1.5rem, 3.65vw, 3.5rem); font-style: normal; }
-.contacts a { display: flex; align-items: center; gap: 0.8rem; min-height: 2.8rem; white-space: nowrap; }
+.contacts address { display: grid; grid-template-columns: minmax(0, 1fr) max-content; gap: clamp(1rem, 3.3vw, 3.5rem); border-left: 1px solid var(--line); padding-left: clamp(1.5rem, 3.65vw, 3.5rem); font-style: normal; }
+.contacts a { display: flex; align-items: center; gap: 0.8rem; min-width: 0; min-height: 2.8rem; line-height: 1.3; }
+.contacts a span { min-width: 0; overflow-wrap: anywhere; }
 .contacts .icon { width: 1.8rem; height: 1.8rem; color: var(--aqua); }
 .contacts a:hover, .legal-links button:hover, .legal-content a:hover { color: var(--aqua); }
 .site-footer { display: flex; align-items: flex-start; justify-content: space-between; gap: 0.9rem 1.6rem; padding-top: 1.1rem; color: var(--secondary); font-size: 0.82rem; }
@@ -537,13 +538,37 @@ h2 { font-size: clamp(2rem, 3.05vw, 3.15rem); font-weight: 670; line-height: 1.0
 .dialog::backdrop { background: rgb(1 9 17 / 77%); backdrop-filter: blur(5px); }
 body:has(.dialog[open]) { overflow: hidden; }
 .dialog-head { display: flex; align-items: center; justify-content: space-between; gap: 0.85rem; margin-bottom: 0.95rem; }
-.dialog-head h2 { font-size: clamp(1.38rem, 2.75vw, 2rem); text-wrap: initial; }
+.dialog-head h2 { min-width: 0; font-size: clamp(1.38rem, 2.75vw, 2rem); text-wrap: initial; overflow-wrap: anywhere; }
+.dialog-head > form { flex: none; }
 .dialog-close { display: grid; place-items: center; width: 2.5rem; height: 2.5rem; border: 1px solid var(--line); border-radius: 50%; color: var(--aqua); }
 .dialog-close:hover { background: #0e4857; }
-.intro-dialog video { width: 100%; aspect-ratio: 16 / 9; background: var(--night); border-radius: 0.65rem; }
-.dialog-caption { margin-top: 0.8rem; color: var(--secondary); font-size: 0.87rem; }
+.inquiry-dialog { width: min(32rem, calc(100% - 2rem)); max-height: calc(100dvh - 2rem); }
+.inquiry-form, .inquiry-pair { display: grid; gap: 0.85rem; }
+.inquiry-pair { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.inquiry-field { display: grid; gap: 0.35rem; color: var(--ink); font-size: 0.9rem; font-weight: 600; }
+.inquiry-field :is(input, textarea) {
+  width: 100%;
+  min-width: 0;
+  min-height: 2.75rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 0.55rem;
+  background: #041a27;
+  color: var(--ink);
+  font: 500 1rem/1.35 Montserrat, Arial, sans-serif;
+}
+.inquiry-field textarea { resize: vertical; }
+.inquiry-field input::placeholder { color: #a6bcc4; font-size: 0.875rem; }
+.inquiry-actions { display: grid; justify-items: start; gap: 0.55rem; }
+.inquiry-submit { min-height: 2.75rem; padding: 0.65rem 1.25rem; }
+.inquiry-submit:disabled { opacity: 0.65; cursor: wait; }
+.inquiry-feedback { font-size: 0.875rem; line-height: 1.4; color: var(--secondary); }
+.inquiry-feedback[data-state="error"] { color: #ffd0c9; }
+.inquiry-feedback[data-state="success"] { color: var(--aqua); }
+.inquiry-feedback a { color: var(--aqua); text-decoration: underline; text-underline-offset: 0.2em; }
 .legal-dialog { width: min(37rem, calc(100% - 2rem)); }
 .legal-content { display: grid; gap: 0.8rem; color: var(--secondary); }
+.legal-content a { overflow-wrap: anywhere; }
 .legal-draft { color: var(--aqua); font-size: 0.88rem; }
 
 @media (min-width: 1051px) {
@@ -605,7 +630,7 @@ body:has(.dialog[open]) { overflow: hidden; }
   .carousel-dots button { width: 1.85rem; height: 2.2rem; }
   .services p { font-size: clamp(0.92rem, 2.05vw, 1.1rem); }
   .contacts { grid-template-columns: 1fr; gap: 1rem; }
-  .contacts address { grid-template-columns: max-content max-content; gap: clamp(1.5rem, 7vw, 4rem); padding-left: 0; border: 0; }
+  .contacts address { grid-template-columns: minmax(0, 1fr) max-content; gap: clamp(1.5rem, 7vw, 4rem); padding-left: 0; border: 0; }
 }
 
 @media (max-width: 720px) {
@@ -624,8 +649,8 @@ body:has(.dialog[open]) { overflow: hidden; }
   .hero-break { display: none; }
   .hero .section-rule { margin-block: 1.35rem 0.85rem; }
   .hero-copy p { max-width: 22rem; font-size: 1.075rem; line-height: 1.38; }
-  .intro-button { min-height: 3.15rem; margin-top: 1.35rem; padding-inline: 1.35rem; font-size: 1rem; }
-  .intro-button .icon { width: 1.35rem; height: 1.35rem; }
+  .hero-button { min-height: 3.15rem; margin-top: 1.35rem; padding-inline: 1.35rem; font-size: 1rem; }
+  .hero-button .icon { width: 1.35rem; height: 1.35rem; }
   .support { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-areas: "fund platform" "credit credit"; min-height: 0; gap: 0.55rem 0.8rem; padding: 0.65rem 0.9rem 0.95rem; }
   .support-fund { grid-area: fund; padding: 0 0.6rem 0 0; }
   .support-fund img { width: min(100%, 8rem); }
@@ -682,6 +707,11 @@ body:has(.dialog[open]) { overflow: hidden; }
 @media (max-width: 360px) {
   .tab-list button { gap: 0.36rem; padding-inline: 0.55rem; }
   .tab-list :is(img, .icon) { width: 1.05rem; height: 1.05rem; }
+}
+
+@media (max-width: 460px) {
+  .inquiry-pair { grid-template-columns: minmax(0, 1fr); }
+  .legal-dialog .dialog-head h2 { font-size: clamp(1.05rem, 5.1vw, 1.38rem); }
 }
 
 @media (prefers-reduced-motion: reduce) {

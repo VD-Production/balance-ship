@@ -266,18 +266,54 @@ sceneToggle.addEventListener('click', () => {
   sceneToggle.setAttribute('aria-label', paused ? 'Продолжить анимацию' : 'Приостановить анимацию');
 });
 
-const intro = document.getElementById('intro');
-const video = intro.querySelector('video');
-document.querySelector('[data-dialog="intro"]').addEventListener('click', () => {
-  intro.showModal();
-  video.play().catch(() => {
-    // The built-in controls remain available when autoplay is blocked.
-  });
+const inquiry = document.getElementById('inquiry');
+const inquiryForm = inquiry.querySelector('.inquiry-form');
+const inquirySubmit = inquiryForm.querySelector('.inquiry-submit');
+const inquiryFeedback = inquiryForm.querySelector('.inquiry-feedback');
+const inquiryMessage = inquiryFeedback.querySelector('span');
+const inquiryEmail = inquiryFeedback.querySelector('a');
+
+function showInquiryMessage(message, state = '') {
+  inquiryMessage.textContent = message;
+  inquiryFeedback.dataset.state = state;
+  inquiryEmail.hidden = state !== 'error';
+}
+
+document.querySelector('[aria-controls="inquiry"]').addEventListener('click', () => {
+  if (!inquirySubmit.disabled) showInquiryMessage('');
+  inquiry.showModal();
 });
 
-intro.addEventListener('close', () => {
-  video.pause();
-  if (video.readyState > 0) video.currentTime = 0;
+inquiryForm.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  if (inquirySubmit.disabled) return;
+
+  const fields = Object.fromEntries([...new FormData(inquiryForm)].map(([name, value]) => [name, value.trim()]));
+  const controller = new AbortController();
+  const timeout = window.setTimeout(() => controller.abort(), 15000);
+  inquirySubmit.disabled = true;
+  showInquiryMessage('Отправляем заявку…');
+
+  try {
+    const response = await fetch(inquiryForm.action, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify(fields),
+      signal: controller.signal,
+    });
+    const result = await response.json();
+    const accepted = result?.success === true || result?.success === 'true';
+    const awaitingActivation = /activat|confirm your|verify your/i.test(result?.message ?? '');
+    if (!response.ok || !accepted || awaitingActivation) throw new Error('The email relay did not accept the request.');
+
+    inquiryForm.reset();
+    showInquiryMessage('Заявка отправлена. Спасибо!', 'success');
+  } catch {
+    showInquiryMessage('Не удалось подтвердить отправку. Попробуйте ещё раз или напишите нам.', 'error');
+  } finally {
+    clearTimeout(timeout);
+    inquirySubmit.disabled = false;
+  }
 });
 
 const legal = document.getElementById('legal');

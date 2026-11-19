@@ -9,8 +9,8 @@
   <link rel="canonical" href="https://vd-prod.com/balance-ship/">
   <link rel="icon" href="assets/mark.svg" type="image/svg+xml">
   <link rel="preload" href="assets/montserrat-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="styles.css?v=mobile-panel-scroll">
-  <script src="site.js?v=mobile-panel-scroll" defer></script>
+  <link rel="stylesheet" href="styles.css?v=inquiry-form">
+  <script src="site.js?v=inquiry-form" defer></script>
 </head>
 <body>
   <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="0" height="0">
@@ -18,6 +18,7 @@
     <symbol id="i-pause" viewBox="0 0 24 24"><path d="M9 5v14m6-14v14"/></symbol>
     <symbol id="i-left" viewBox="0 0 24 24"><path d="m11 5-7 7 7 7m-7-7h16"/></symbol>
     <symbol id="i-right" viewBox="0 0 24 24"><path d="m13 5 7 7-7 7m7-7H4"/></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 4v15m-6-6 6 6 6-6"/></symbol>
     <symbol id="i-diagonal" viewBox="0 0 24 24"><path d="M5 19 19 5M7 5h12v12"/></symbol>
     <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></symbol>
     <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
@@ -71,10 +72,10 @@
           <h1 id="hero-title"><span>Корабль</span><span>равновесия</span></h1>
           <span class="section-rule" aria-hidden="true"></span>
           <p>VR-нейротренажёр с биологической<br class="hero-break"> обратной связью для релаксации<br class="hero-break"> и развития навыков саморегуляции</p>
-          <button class="pill intro-button" type="button" data-dialog="intro">
-            <svg class="icon" aria-hidden="true"><use href="#i-play"/></svg>
-            <span>Смотреть интро</span>
-          </button>
+          <a class="pill hero-button" href="#project">
+            <svg class="icon" aria-hidden="true"><use href="#i-down"/></svg>
+            <span>Узнать о проекте</span>
+          </a>
         </div>
 
         <aside class="support" aria-label="Поддержка проекта">
@@ -240,7 +241,7 @@
             <li><svg class="icon" aria-hidden="true"><use href="#i-headset"/></svg><p>Техническое<br> сопровождение</p></li>
           </ul>
           <div class="institutions-action">
-            <a class="pill primary-button" href="#contacts">Обсудить внедрение <svg class="icon" aria-hidden="true"><use href="#i-diagonal"/></svg></a>
+            <button class="pill primary-button" type="button" aria-haspopup="dialog" aria-controls="inquiry">Обсудим внедрение <svg class="icon" aria-hidden="true"><use href="#i-diagonal"/></svg></button>
             <p><svg class="icon" aria-hidden="true"><use href="#i-chat"/></svg>Консультация по продукту и подключению</p>
           </div>
         </div>
@@ -265,8 +266,8 @@
             <h2 id="contacts-title">Свяжитесь с нами</h2>
           </div>
           <address>
-            <a href="mailto:info@balance-ship.ru"><svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg><span>info@balance-ship.ru</span></a>
-            <a href="https://t.me/balance_ship" target="_blank" rel="noopener noreferrer"><svg class="icon" aria-hidden="true"><use href="#i-telegram"/></svg><span>t.me/balance_ship</span></a>
+            <a href="mailto:vadimovskiproduction@gmail.com"><svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg><span>vadimovskiproduction<wbr>@gmail.com</span></a>
+            <a href="https://t.me/SpiritShip" target="_blank" rel="noopener noreferrer"><svg class="icon" aria-hidden="true"><use href="#i-telegram"/></svg><span>t.me/SpiritShip</span></a>
           </address>
         </section>
 
@@ -281,16 +282,38 @@
     </div>
   </main>
 
-  <dialog class="dialog intro-dialog" id="intro" aria-labelledby="intro-title">
+  <dialog class="dialog inquiry-dialog" id="inquiry" aria-labelledby="inquiry-title">
     <div class="dialog-head">
-      <h2 id="intro-title">Корабль равновесия</h2>
-      <form method="dialog"><button class="dialog-close" type="submit" aria-label="Закрыть интро"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button></form>
+      <h2 id="inquiry-title">Обсудим внедрение</h2>
+      <form method="dialog"><button class="dialog-close" type="submit" aria-label="Закрыть форму"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button></form>
     </div>
-    <video controls playsinline preload="none" poster="assets/game.webp" aria-label="Визуальное интро Корабля равновесия">
-      <source src="assets/intro.mp4" type="video/mp4">
-      <a href="assets/intro.mp4">Скачать интро</a>
-    </video>
-    <p class="dialog-caption">Визуальное интро по мотивам игрового мира</p>
+    <form class="inquiry-form" method="post" action="https://formsubmit.co/ajax/vadimovskiproduction@gmail.com">
+      <input type="hidden" name="_subject" value="Корабль равновесия — запрос на внедрение">
+      <input type="hidden" name="_template" value="table">
+      <input type="text" name="_honey" tabindex="-1" autocomplete="off" hidden>
+      <div class="inquiry-pair">
+        <label class="inquiry-field">
+          <span>Имя</span>
+          <input name="Имя" autocomplete="name" maxlength="100" pattern=".*\S.*" required autofocus>
+        </label>
+        <label class="inquiry-field">
+          <span>Организация</span>
+          <input name="Организация" autocomplete="organization" maxlength="160" pattern=".*\S.*" required>
+        </label>
+      </div>
+      <label class="inquiry-field">
+        <span>Контакт для связи</span>
+        <input name="Контакт для связи" placeholder="Почта, телефон или Telegram" maxlength="160" pattern=".*\S.*" required>
+      </label>
+      <label class="inquiry-field">
+        <span>Комментарий</span>
+        <textarea name="Комментарий" rows="3" maxlength="1500"></textarea>
+      </label>
+      <div class="inquiry-actions">
+        <button class="pill inquiry-submit" type="submit">Отправить заявку</button>
+        <p class="inquiry-feedback" role="status" aria-atomic="true"><span></span> <a href="mailto:vadimovskiproduction@gmail.com" hidden>Написать на почту</a></p>
+      </div>
+    </form>
   </dialog>
 
   <dialog class="dialog legal-dialog" id="legal" aria-labelledby="legal-title">
@@ -303,14 +326,14 @@
 
   <template id="privacy">
     <p class="legal-draft">Проект документа</p>
-    <p>На этой странице нет форм регистрации и ввода персональных данных. Для связи с проектом используются электронная почта и Telegram.</p>
-    <p>Переходя по ссылке на почту или в Telegram, вы взаимодействуете с выбранным сервисом. Если вы отправите сообщение, команда проекта получит сведения, которые вы укажете в нём.</p>
-    <p>Вопросы можно направить по адресу <a href="mailto:info@balance-ship.ru">info@balance-ship.ru</a>.</p>
+    <p>При отправке заявки команда проекта получает имя, название организации, контакт для связи и комментарий, чтобы ответить на запрос.</p>
+    <p>Сервис FormSubmit пересылает заявки на почту проекта. При обращении по почте или в Telegram команда получает сведения, которые вы укажете в сообщении.</p>
+    <p>Вопросы можно направить по адресу <a href="mailto:vadimovskiproduction@gmail.com">vadimovskiproduction@gmail.com</a>.</p>
   </template>
   <template id="terms">
     <p class="legal-draft">Проект документа</p>
-    <p>Страница знакомит с проектом «Корабль равновесия». Иллюстрации и интро показывают идею тренажёра, а условия лицензирования, поставки оборудования, обучения и сопровождения согласовываются отдельно.</p>
-    <p>Обсудить использование продукта и материалов можно по адресу <a href="mailto:info@balance-ship.ru">info@balance-ship.ru</a>.</p>
+    <p>Страница знакомит с проектом «Корабль равновесия». Условия лицензирования, поставки оборудования, обучения и сопровождения согласовываются отдельно.</p>
+    <p>Обсудить использование продукта и материалов можно по адресу <a href="mailto:vadimovskiproduction@gmail.com">vadimovskiproduction@gmail.com</a>.</p>
   </template>
 </body>
 </html>
