@@ -113,27 +113,59 @@ const panels = tabs.map((tab) => document.getElementById(tab.getAttribute('aria-
 const dots = [...showcase.querySelectorAll('.carousel-dots button')];
 const exercisePanel = breathing.closest('.tab-panel');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+const panelScrollLayout = window.matchMedia('(max-width: 720px), (hover: none) and (pointer: coarse)');
 let activeTab = 0;
+let panelsInFlow = false;
 let scrollStep = 0;
 let stickyTop = 0;
 let tabFrame = 0;
+
+function renderTabSelection() {
+  tabs.forEach((tab, index) => {
+    const selected = index === activeTab;
+    if (panelsInFlow) {
+      if (selected) tab.setAttribute('aria-current', 'location');
+      else tab.removeAttribute('aria-current');
+    } else {
+      tab.setAttribute('aria-selected', String(selected));
+    }
+
+    tab.tabIndex = panelsInFlow || selected ? 0 : -1;
+    panels[index].hidden = !panelsInFlow && !selected;
+    dots[index].setAttribute('aria-pressed', String(selected));
+  });
+}
+
+function setPanelsInFlow(inFlow) {
+  if (inFlow === panelsInFlow) return;
+
+  panelsInFlow = inFlow;
+  showcaseTrack.toggleAttribute('data-panel-scroll', inFlow);
+  tabList.setAttribute('role', inFlow ? 'group' : 'tablist');
+  tabs.forEach((tab, index) => {
+    if (inFlow) {
+      tab.removeAttribute('role');
+      tab.removeAttribute('aria-selected');
+    } else {
+      tab.setAttribute('role', 'tab');
+      tab.removeAttribute('aria-current');
+    }
+    panels[index].setAttribute('role', inFlow ? 'region' : 'tabpanel');
+    panels[index].tabIndex = inFlow ? -1 : 0;
+  });
+  renderTabSelection();
+}
 
 function selectTab(index, focus = false) {
   const nextTab = (index + tabs.length) % tabs.length;
 
   if (nextTab !== activeTab) {
     const previousPanel = panels[activeTab];
-    focus ||= previousPanel.contains(document.activeElement);
+    focus ||= !panelsInFlow && previousPanel.contains(document.activeElement);
     if (previousPanel === exercisePanel) stopBreathing();
 
     activeTab = nextTab;
-    tabs.forEach((tab, tabIndex) => {
-      const selected = tabIndex === activeTab;
-      tab.setAttribute('aria-selected', String(selected));
-      tab.tabIndex = selected ? 0 : -1;
-      panels[tabIndex].hidden = !selected;
-      dots[tabIndex].setAttribute('aria-pressed', String(selected));
-    });
+    renderTabSelection();
   }
 
   if (focus) tabs[activeTab].focus({ preventScroll: true });
@@ -143,16 +175,35 @@ function pinnedOffset() {
   return stickyTop - showcaseTrack.getBoundingClientRect().top;
 }
 
+function panelReadingLine() {
+  return header.offsetHeight + tabList.offsetHeight + 12;
+}
+
 function followScroll() {
   tabFrame = 0;
+  if (panelsInFlow) {
+    const line = panelReadingLine();
+    const visiblePanel = panels.findLastIndex((panel) => panel.getBoundingClientRect().top <= line);
+    selectTab(Math.max(0, visiblePanel));
+    return;
+  }
   if (!scrollStep) return;
 
   const step = Math.floor(pinnedOffset() / scrollStep);
   selectTab(Math.min(tabs.length - 1, Math.max(0, step)));
 }
 
-function updateStickyTabs() {
+function updateShowcaseLayout() {
   if (!showcaseTrack) return;
+
+  setPanelsInFlow(panelScrollLayout.matches && !reducedMotion.matches);
+  if (panelsInFlow) {
+    showcaseTrack.removeAttribute('data-scroll-tabs');
+    scrollStep = 0;
+    followScroll();
+    scheduleNavigationUpdate();
+    return;
+  }
 
   const viewportHeight = window.innerHeight;
   const headerHeight = header.offsetHeight;
@@ -175,6 +226,11 @@ function updateStickyTabs() {
 function controlTab(index, focus = false) {
   const previousTab = activeTab;
   selectTab(index, focus);
+  if (panelsInFlow) {
+    const panelTop = panels[activeTab].getBoundingClientRect().top + window.scrollY;
+    window.scrollTo({ top: panelTop - panelReadingLine() + 2, behavior: 'instant' });
+    return;
+  }
   if (!scrollStep || activeTab === previousTab) return;
 
   const trackStart = window.scrollY - pinnedOffset();
@@ -182,12 +238,13 @@ function controlTab(index, focus = false) {
 }
 
 window.addEventListener('scroll', () => {
-  if (scrollStep && !tabFrame) tabFrame = requestAnimationFrame(followScroll);
+  if ((panelsInFlow || scrollStep) && !tabFrame) tabFrame = requestAnimationFrame(followScroll);
 }, { passive: true });
-window.addEventListener('resize', updateStickyTabs);
-reducedMotion.addEventListener('change', updateStickyTabs);
-new ResizeObserver(updateStickyTabs).observe(showcase);
-updateStickyTabs();
+window.addEventListener('resize', updateShowcaseLayout);
+panelScrollLayout.addEventListener('change', updateShowcaseLayout);
+reducedMotion.addEventListener('change', updateShowcaseLayout);
+new ResizeObserver(updateShowcaseLayout).observe(showcase);
+updateShowcaseLayout();
 
 tabs.forEach((tab, index) => tab.addEventListener('click', () => controlTab(index)));
 dots.forEach((dot, index) => dot.addEventListener('click', () => controlTab(index)));

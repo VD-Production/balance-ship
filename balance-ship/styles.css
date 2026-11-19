@@ -310,13 +310,16 @@ h2 { font-size: clamp(2rem, 3.05vw, 3.15rem); font-weight: 670; line-height: 1.0
   width: 1px;
   background: linear-gradient(transparent, #6bcdd84f, transparent);
 }
-.tab-list button[aria-selected="true"], .tab-list button:hover { background-color: #0b4a59; }
-.tab-list button[aria-selected="true"] {
+.tab-list button:is([aria-selected="true"], [aria-current="location"]) {
+  background-color: #0b4a59;
   border-color: #62ddeaaa;
   box-shadow: inset 0 0 20px #29e4f15c, 0 0 15px #39dffa47;
 }
-.tab-list button[aria-selected="true"]::before,
-.tab-list button[aria-selected="true"] + button::before { opacity: 0; }
+.tab-list button:is([aria-selected="true"], [aria-current="location"])::before,
+.tab-list button:is([aria-selected="true"], [aria-current="location"]) + button::before { opacity: 0; }
+@media (hover: hover) {
+  .tab-list button:hover { background-color: #0b4a59; }
+}
 .tab-list :is(img, .icon) { flex: none; color: var(--aqua); width: 1.9rem; height: 1.78rem; }
 .tab-list img { width: 2.2rem; object-fit: contain; }
 .showcase-frame {
@@ -324,6 +327,8 @@ h2 { font-size: clamp(2rem, 3.05vw, 3.15rem); font-weight: 670; line-height: 1.0
   position: relative;
   margin-top: -1.56rem;
   padding: 2.48rem clamp(2.4rem, 4.55vw, 4.35rem) 1.13rem clamp(2.4rem, 6.15vw, 5.7rem);
+}
+.showcase-frame, .showcase-track[data-panel-scroll] .tab-panel {
   border: 1px solid rgb(108 209 226 / 53%);
   border-radius: 1.75rem;
   background: linear-gradient(115deg, rgb(6 38 54 / 77%), rgb(3 35 48 / 87%));
@@ -340,6 +345,28 @@ h2 { font-size: clamp(2rem, 3.05vw, 3.15rem); font-weight: 670; line-height: 1.0
 }
 /* The tallest tab sets the frame height throughout the scroll sequence. */
 .tab-panel[hidden] { display: grid !important; visibility: hidden; }
+.showcase-track[data-panel-scroll] .tab-list {
+  position: sticky;
+  top: var(--header-height);
+  width: 100%;
+  background: #031f2e;
+}
+.showcase-track[data-panel-scroll] .showcase-frame {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  margin-top: 0.6rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  box-shadow: none;
+}
+.showcase-track[data-panel-scroll] .tab-panel {
+  min-height: 0;
+  padding: clamp(0.875rem, 2.4vw, 1.5rem);
+  border-radius: 1.12rem;
+}
+.showcase-track[data-panel-scroll] :is(.carousel-arrow, .carousel-dots) { display: none; }
 .panel-copy h3 { max-width: 22.5rem; font-size: clamp(1.25rem, 1.82vw, 1.65rem); line-height: 1.05; letter-spacing: -0.023em; font-weight: 700; }
 .panel-copy > p { margin-top: 0.24rem; color: var(--secondary); font-size: 1rem; line-height: 1.09; }
 .steps { display: grid; gap: 0.42rem; margin-top: 0.5rem; }
