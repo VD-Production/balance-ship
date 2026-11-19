@@ -50,7 +50,6 @@ function updateNavigation() {
   // Reserve a scroll interval for both sections even if their headings cannot reach the header.
   const contactsStart = Math.min(contactsTop - readingLine, maxScrollTop - sectionInterval);
   const projectStart = Math.min(projectTop - readingLine, contactsStart - sectionInterval);
-  const projectAnchor = Math.min(projectTop - headerHeight, contactsStart - sectionInterval / 2);
 
   const current = sections.findLastIndex((section) => {
     if (section === contactsSection) return scrollTop >= contactsStart;
@@ -59,7 +58,6 @@ function updateNavigation() {
   });
 
   header.classList.toggle('is-scrolled', scrollTop > 12);
-  projectSection.style.scrollMarginTop = `${Math.ceil(projectTop - projectAnchor)}px`;
   navLinks.forEach((link, index) => {
     if (index === current) link.setAttribute('aria-current', 'location');
     else link.removeAttribute('aria-current');
@@ -272,11 +270,21 @@ const inquirySubmit = inquiryForm.querySelector('.inquiry-submit');
 const inquiryFeedback = inquiryForm.querySelector('.inquiry-feedback');
 const inquiryMessage = inquiryFeedback.querySelector('span');
 const inquiryEmail = inquiryFeedback.querySelector('a');
+const inquiryMailto = inquiryEmail.href;
 
-function showInquiryMessage(message, state = '') {
+function showInquiryMessage(message, state = '', fields) {
   inquiryMessage.textContent = message;
   inquiryFeedback.dataset.state = state;
-  inquiryEmail.hidden = state !== 'error';
+  inquiryEmail.hidden = !fields;
+  inquiryEmail.href = inquiryMailto;
+  if (!fields) return;
+
+  const body = Object.entries(fields)
+    .filter(([name]) => !name.startsWith('_'))
+    .map(([name, value]) => `${name}: ${value}`)
+    .join('\n')
+    .replace(/\r?\n/g, '\r\n');
+  inquiryEmail.href = `${inquiryMailto}?subject=${encodeURIComponent(fields._subject)}&body=${encodeURIComponent(body)}`;
 }
 
 document.querySelector('[aria-controls="inquiry"]').addEventListener('click', () => {
@@ -303,13 +311,17 @@ inquiryForm.addEventListener('submit', async (event) => {
     });
     const result = await response.json();
     const accepted = result?.success === true || result?.success === 'true';
-    const awaitingActivation = /activat|confirm your|verify your/i.test(result?.message ?? '');
-    if (!response.ok || !accepted || awaitingActivation) throw new Error('The email relay did not accept the request.');
+    const awaitingActivation = /not (?:yet |been )?activated|needs activation|requires activation|activation (?:required|link|e-?mail)|activate (?:the |your )?form|(?:confirm|verify) your e-?mail/i.test(result?.message ?? '');
+    if (awaitingActivation) {
+      showInquiryMessage('Почта проекта ждёт подтверждения.', 'error', fields);
+      return;
+    }
+    if (!response.ok || !accepted) throw new Error('The email relay did not accept the request.');
 
     inquiryForm.reset();
     showInquiryMessage('Заявка отправлена. Спасибо!', 'success');
   } catch {
-    showInquiryMessage('Не удалось подтвердить отправку. Попробуйте ещё раз или напишите нам.', 'error');
+    showInquiryMessage('Не удалось подтвердить отправку. Попробуйте ещё раз.', 'error', fields);
   } finally {
     clearTimeout(timeout);
     inquirySubmit.disabled = false;

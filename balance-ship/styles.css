@@ -485,7 +485,14 @@ h2 { font-size: clamp(2rem, 3.05vw, 3.15rem); font-weight: 670; line-height: 1.0
 .institutions-action > p { display: flex; gap: 0.58rem; align-items: center; padding-left: 0.65rem; font-size: 1rem; color: var(--secondary); }
 .institutions-action > p .icon { width: 1.18rem; height: 1.18rem; }
 
-.closing { position: relative; isolation: isolate; padding-bottom: clamp(5rem, 8.5vw, 8.5rem); }
+.closing {
+  position: relative;
+  isolation: isolate;
+  /* Leave enough scroll room to align the project section below the header. */
+  min-height: calc(100vh - var(--header-height) + 8rem);
+  min-height: calc(100lvh - var(--header-height) + 8rem);
+  padding-bottom: clamp(5rem, 8.5vw, 8.5rem);
+}
 .closing::before {
   position: absolute;
   content: "";
