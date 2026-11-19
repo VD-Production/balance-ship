@@ -87,41 +87,100 @@ breathButton.addEventListener('click', () => {
 });
 
 const showcase = document.querySelector('.showcase');
+const showcaseTrack = showcase.closest('.showcase-track');
 const tabList = showcase.querySelector('.tab-list');
 const tabs = [...tabList.querySelectorAll('[role="tab"]')];
 const panels = tabs.map((tab) => document.getElementById(tab.getAttribute('aria-controls')));
 const dots = [...showcase.querySelectorAll('.carousel-dots button')];
 const exercisePanel = breathing.closest('.tab-panel');
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 let activeTab = 0;
+let scrollStep = 0;
+let stickyTop = 0;
+let tabFrame = 0;
 
 function selectTab(index, focus = false) {
   const nextTab = (index + tabs.length) % tabs.length;
 
-  if (panels[activeTab] === exercisePanel && nextTab !== activeTab) stopBreathing();
-  activeTab = nextTab;
+  if (nextTab !== activeTab) {
+    const previousPanel = panels[activeTab];
+    focus ||= previousPanel.contains(document.activeElement);
+    if (previousPanel === exercisePanel) stopBreathing();
 
-  tabs.forEach((tab, tabIndex) => {
-    const selected = tabIndex === activeTab;
-    tab.setAttribute('aria-selected', String(selected));
-    tab.tabIndex = selected ? 0 : -1;
-    panels[tabIndex].hidden = !selected;
-    dots[tabIndex].setAttribute('aria-pressed', String(selected));
-  });
+    activeTab = nextTab;
+    tabs.forEach((tab, tabIndex) => {
+      const selected = tabIndex === activeTab;
+      tab.setAttribute('aria-selected', String(selected));
+      tab.tabIndex = selected ? 0 : -1;
+      panels[tabIndex].hidden = !selected;
+      dots[tabIndex].setAttribute('aria-pressed', String(selected));
+    });
+  }
 
-  if (focus) tabs[activeTab].focus();
+  if (focus) tabs[activeTab].focus({ preventScroll: true });
 }
 
-tabs.forEach((tab, index) => tab.addEventListener('click', () => selectTab(index)));
-dots.forEach((dot, index) => dot.addEventListener('click', () => selectTab(index)));
-showcase.querySelector('.previous').addEventListener('click', () => selectTab(activeTab - 1));
-showcase.querySelector('.next').addEventListener('click', () => selectTab(activeTab + 1));
+function pinnedOffset() {
+  return stickyTop - showcaseTrack.getBoundingClientRect().top;
+}
+
+function followScroll() {
+  tabFrame = 0;
+  if (!scrollStep) return;
+
+  const step = Math.floor(pinnedOffset() / scrollStep);
+  selectTab(Math.min(tabs.length - 1, Math.max(0, step)));
+}
+
+function updateStickyTabs() {
+  if (!showcaseTrack) return;
+
+  const viewportHeight = window.innerHeight;
+  const headerHeight = header.offsetHeight;
+  const showcaseHeight = showcase.offsetHeight;
+  const canPin = !reducedMotion.matches && showcaseHeight + 24 <= viewportHeight - headerHeight;
+
+  showcaseTrack.toggleAttribute('data-scroll-tabs', canPin);
+  if (!canPin) {
+    scrollStep = 0;
+    return;
+  }
+
+  stickyTop = Math.round((viewportHeight + headerHeight - showcaseHeight) / 2);
+  scrollStep = Math.round(Math.min(300, Math.max(130, viewportHeight * 0.27)));
+  showcaseTrack.style.setProperty('--showcase-top', `${stickyTop}px`);
+  showcaseTrack.style.setProperty('--showcase-scroll-distance', `${scrollStep * tabs.length}px`);
+  followScroll();
+}
+
+function controlTab(index, focus = false) {
+  const previousTab = activeTab;
+  selectTab(index, focus);
+  if (!scrollStep || activeTab === previousTab) return;
+
+  const trackStart = window.scrollY - pinnedOffset();
+  window.scrollTo({ top: trackStart + (activeTab + 0.5) * scrollStep, behavior: 'instant' });
+}
+
+window.addEventListener('scroll', () => {
+  if (scrollStep && !tabFrame) tabFrame = requestAnimationFrame(followScroll);
+}, { passive: true });
+window.addEventListener('resize', updateStickyTabs);
+reducedMotion.addEventListener('change', updateStickyTabs);
+new ResizeObserver(updateStickyTabs).observe(showcase);
+updateStickyTabs();
+
+tabs.forEach((tab, index) => tab.addEventListener('click', () => controlTab(index)));
+dots.forEach((dot, index) => dot.addEventListener('click', () => controlTab(index)));
+showcase.querySelector('.previous').addEventListener('click', () => controlTab(activeTab - 1));
+showcase.querySelector('.next').addEventListener('click', () => controlTab(activeTab + 1));
 
 tabList.addEventListener('keydown', (event) => {
   const positions = { ArrowLeft: activeTab - 1, ArrowRight: activeTab + 1, Home: 0, End: tabs.length - 1 };
   if (!Object.hasOwn(positions, event.key)) return;
 
   event.preventDefault();
-  selectTab(positions[event.key], true);
+  controlTab(positions[event.key], true);
 });
 
 const scene = document.querySelector('[data-scene]');

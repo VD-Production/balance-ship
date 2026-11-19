@@ -263,7 +263,14 @@ h2 { font-size: clamp(2rem, 3.05vw, 3.15rem); font-weight: 670; line-height: 1.0
 .product h2 { font-size: clamp(2rem, 2.85vw, 3.05rem); letter-spacing: -0.015em; }
 .product .section-rule { margin-block: 0.65rem; }
 .product .section-description { line-height: 1.26; }
-.showcase { width: min(86rem, 100% - 2 * (var(--gutter) - 0.9rem)); margin: 1.65rem auto 0; }
+.showcase-track { margin-top: 1.65rem; }
+.showcase-track[data-scroll-tabs]::after {
+  content: "";
+  display: block;
+  height: var(--showcase-scroll-distance);
+}
+.showcase { width: min(86rem, 100% - 2 * (var(--gutter) - 0.9rem)); margin-inline: auto; }
+.showcase-track[data-scroll-tabs] > .showcase { position: sticky; top: var(--showcase-top); }
 .tab-list {
   position: relative;
   z-index: 1;
@@ -310,6 +317,7 @@ h2 { font-size: clamp(2rem, 3.05vw, 3.15rem); font-weight: 670; line-height: 1.0
 .tab-list :is(img, .icon) { flex: none; color: var(--aqua); width: 1.9rem; height: 1.78rem; }
 .tab-list img { width: 2.2rem; object-fit: contain; }
 .showcase-frame {
+  display: grid;
   position: relative;
   margin-top: -1.56rem;
   padding: 2.48rem clamp(2.4rem, 4.55vw, 4.35rem) 1.13rem clamp(2.4rem, 6.15vw, 5.7rem);
@@ -318,7 +326,17 @@ h2 { font-size: clamp(2rem, 3.05vw, 3.15rem); font-weight: 670; line-height: 1.0
   background: linear-gradient(115deg, rgb(6 38 54 / 77%), rgb(3 35 48 / 87%));
   box-shadow: inset 0 0 35px #1397b01b, 0 14px 40px #000e191c;
 }
-.tab-panel { display: grid; grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.55fr); gap: clamp(1.38rem, 2.45vw, 2.55rem); align-items: start; min-height: 17.75rem; }
+.tab-panel {
+  display: grid;
+  grid-area: 1 / 1;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.55fr);
+  gap: clamp(1.38rem, 2.45vw, 2.55rem);
+  align-content: start;
+  align-items: start;
+  min-height: 17.75rem;
+}
+/* The tallest tab sets the frame height throughout the scroll sequence. */
+.tab-panel[hidden] { display: grid !important; visibility: hidden; }
 .panel-copy h3 { max-width: 22.5rem; font-size: clamp(1.25rem, 1.82vw, 1.65rem); line-height: 1.05; letter-spacing: -0.023em; font-weight: 700; }
 .panel-copy > p { margin-top: 0.24rem; color: var(--secondary); font-size: 1rem; line-height: 1.09; }
 .steps { display: grid; gap: 0.42rem; margin-top: 0.5rem; }
@@ -370,7 +388,7 @@ h2 { font-size: clamp(2rem, 3.05vw, 3.15rem); font-weight: 670; line-height: 1.0
 }
 .game-art { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 28%; }
 [data-scene] .game-art { animation: scenic-drift 14s ease-in-out infinite alternate; }
-[data-scene].is-paused .game-art { animation-play-state: paused; }
+[data-scene].is-paused .game-art, .tab-panel[hidden] [data-scene] .game-art { animation-play-state: paused; }
 @keyframes scenic-drift { from { transform: scale(1); } to { transform: scale(1.045) translateX(-0.5%); } }
 .scene-toggle { position: absolute; top: 0.35rem; left: 0.55rem; display: grid; place-items: center; width: 2.35rem; height: 2.35rem; border-radius: 50%; color: #62d7ff; }
 .scene-toggle:hover { background: #081a2dd1; }
@@ -573,16 +591,16 @@ body:has(.dialog[open]) { overflow: hidden; }
   .eyebrow { font-size: 0.81rem; }
   .section-description { font-size: 1rem; line-height: 1.44; }
   .product .section-description { line-height: 1.44; }
-  .showcase { margin-top: 1.3rem; }
+  .showcase-track { margin-top: 1.3rem; }
   .tab-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.18rem; padding: 0.25rem; border-radius: 1rem; }
   .tab-list button { min-height: 2.75rem; justify-content: flex-start; gap: 0.48rem; padding-inline: 0.52rem; border-radius: 0.7rem; text-align: left; font-size: 0.84rem; }
   .tab-list button + button::before { display: none; }
-  .showcase-frame { margin-top: 0.55rem; padding: 1rem; border-radius: 1.12rem; }
-  .tab-panel { grid-template-columns: 1fr; gap: 1.05rem; }
+  .showcase-frame { margin-top: 0.5rem; padding: 0.875rem; border-radius: 1.12rem; }
+  .tab-panel { grid-template-columns: 1fr; gap: 0.85rem; }
   .panel-copy h3 { font-size: 1.28rem; line-height: 1.13; }
   .panel-copy > p { margin-top: 0.5rem; }
   .steps { gap: 0.56rem; margin-top: 0.8rem; }
-  .game-view { aspect-ratio: 1.6; border-radius: 0.8rem; }
+  .game-view { aspect-ratio: 2; min-height: 10rem; border-radius: 0.8rem; }
   .game-art, .event-view .game-art { object-position: center; }
   .signal { width: 32%; padding: 0.25rem 0.45rem 0.45rem; border-radius: 0.55rem; }
   .signal-track { height: 0.34rem; }

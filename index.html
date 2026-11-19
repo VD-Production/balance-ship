@@ -8,8 +8,8 @@
   <title>Корабль равновесия — VR-нейротренажёр</title>
   <link rel="icon" href="assets/mark.svg" type="image/svg+xml">
   <link rel="preload" href="assets/montserrat-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="styles.css">
-  <script src="site.js" defer></script>
+  <link rel="stylesheet" href="styles.css?v=scroll-tabs">
+  <script src="site.js?v=scroll-tabs" defer></script>
 </head>
 <body>
   <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="0" height="0">
@@ -97,129 +97,131 @@
           <p class="section-description">«Корабль равновесия» объединяет игровой формат, упражнения на релаксацию и сопровождение специалиста, чтобы сделать тренировку навыков саморегуляции более наглядной, вовлекающей и удобной для практики.</p>
         </div>
 
-        <div class="showcase" aria-label="Возможности тренажёра">
-          <div class="tab-list" role="tablist" aria-label="Возможности тренажёра">
-            <button id="tab-game" role="tab" type="button" aria-controls="panel-game" aria-selected="true">
-              <img src="assets/mark.svg" width="36" height="17" alt="">Игровой процесс
-            </button>
-            <button id="tab-events" role="tab" type="button" aria-controls="panel-events" aria-selected="false" tabindex="-1">
-              <svg class="icon" aria-hidden="true"><use href="#i-lotus"/></svg>Игровые события
-            </button>
-            <button id="tab-exercise" role="tab" type="button" aria-controls="panel-exercise" aria-selected="false" tabindex="-1">
-              <svg class="icon" aria-hidden="true"><use href="#i-bolt"/></svg>Игровые упражнения
-            </button>
-            <button id="tab-desk" role="tab" type="button" aria-controls="panel-desk" aria-selected="false" tabindex="-1">
-              <svg class="icon" aria-hidden="true"><use href="#i-screen"/></svg>Панель управления
-            </button>
-          </div>
+        <div class="showcase-track">
+          <div class="showcase" aria-label="Возможности тренажёра">
+            <div class="tab-list" role="tablist" aria-label="Возможности тренажёра">
+              <button id="tab-game" role="tab" type="button" aria-controls="panel-game" aria-selected="true">
+                <img src="assets/mark.svg" width="36" height="17" alt="">Игровой процесс
+              </button>
+              <button id="tab-events" role="tab" type="button" aria-controls="panel-events" aria-selected="false" tabindex="-1">
+                <svg class="icon" aria-hidden="true"><use href="#i-lotus"/></svg>Игровые события
+              </button>
+              <button id="tab-exercise" role="tab" type="button" aria-controls="panel-exercise" aria-selected="false" tabindex="-1">
+                <svg class="icon" aria-hidden="true"><use href="#i-bolt"/></svg>Игровые упражнения
+              </button>
+              <button id="tab-desk" role="tab" type="button" aria-controls="panel-desk" aria-selected="false" tabindex="-1">
+                <svg class="icon" aria-hidden="true"><use href="#i-screen"/></svg>Панель управления
+              </button>
+            </div>
 
-          <div class="showcase-frame">
-            <button class="carousel-arrow previous" type="button" aria-label="Предыдущая вкладка">
-              <svg class="icon" aria-hidden="true"><use href="#i-left"/></svg>
-            </button>
-            <button class="carousel-arrow next" type="button" aria-label="Следующая вкладка">
-              <svg class="icon" aria-hidden="true"><use href="#i-right"/></svg>
-            </button>
+            <div class="showcase-frame">
+              <button class="carousel-arrow previous" type="button" aria-label="Предыдущая вкладка">
+                <svg class="icon" aria-hidden="true"><use href="#i-left"/></svg>
+              </button>
+              <button class="carousel-arrow next" type="button" aria-label="Следующая вкладка">
+                <svg class="icon" aria-hidden="true"><use href="#i-right"/></svg>
+              </button>
 
-            <div class="tab-panel" id="panel-game" role="tabpanel" aria-labelledby="tab-game" tabindex="0">
-              <div class="panel-copy">
-                <h3>Игровой процесс<br class="desktop-break"> на&nbsp;основе физиологических сигналов</h3>
-                <p>Мир игры и движение корабля реагируют на ваше состояние в реальном времени: дыхание, сердечный ритм, активность мозга и мышечное напряжение.</p>
-                <ul class="steps">
-                  <li>
-                    <span class="step-icon"><svg class="icon" aria-hidden="true"><use href="#i-pulse"/></svg></span>
-                    <span><strong>Ваша задача —</strong><br> находиться в состоянии баланса<br class="wide-break"> и поддерживать его в пути.</span>
-                  </li>
-                  <li>
-                    <span class="step-icon"><svg class="icon" aria-hidden="true"><use href="#i-spark"/></svg></span>
-                    <span><strong>В процессе возникают события —</strong><br> смена погоды, препятствия, особые зоны, которые делают путешествие живым и разнообразным.</span>
-                  </li>
-                  <li>
-                    <span class="step-icon"><svg class="icon" aria-hidden="true"><use href="#i-target"/></svg></span>
-                    <span><strong>Вы выполняете простые упражнения,</strong> которые помогают вернуть равновесие и продолжить путь.</span>
-                  </li>
-                </ul>
-              </div>
-              <div class="game-view" aria-label="Иллюстрация игрового процесса" data-scene>
-                <img class="game-art" src="assets/game.webp" width="1536" height="864" alt="Светящийся корабль движется по ночному морю к лучу на горизонте" loading="lazy">
-                <button class="scene-toggle" type="button" aria-label="Приостановить анимацию">
-                  <svg class="icon scene-pause" aria-hidden="true"><use href="#i-pause"/></svg>
-                  <svg class="icon scene-play" aria-hidden="true"><use href="#i-play"/></svg>
-                </button>
-                <svg class="route" viewBox="0 0 126 22" aria-hidden="true">
-                  <path d="M7 11h112"/><circle cx="7" cy="11" r="3.7"/><circle cx="56" cy="11" r="3.7"/>
-                  <circle cx="119" cy="11" r="3.7"/><path class="route-current" d="m91 4.5 6.5 6.5-6.5 6.5-6.5-6.5Z"/>
-                </svg>
-                <div class="signal" aria-hidden="true">
-                  <svg viewBox="0 0 140 36"><path d="M2 23c17 3 25-20 43-17 16 3 23 22 40 21 14-1 21-13 33-13 7 0 13 2 20 7"/><circle cx="102" cy="21" r="3.3"/></svg>
-                  <span class="signal-track"><span></span></span>
+              <div class="tab-panel" id="panel-game" role="tabpanel" aria-labelledby="tab-game" tabindex="0">
+                <div class="panel-copy">
+                  <h3>Игровой процесс<br class="desktop-break"> на&nbsp;основе физиологических сигналов</h3>
+                  <p>Мир игры и движение корабля реагируют на ваше состояние в реальном времени: дыхание, сердечный ритм, активность мозга и мышечное напряжение.</p>
+                  <ul class="steps">
+                    <li>
+                      <span class="step-icon"><svg class="icon" aria-hidden="true"><use href="#i-pulse"/></svg></span>
+                      <span><strong>Ваша задача —</strong><br> находиться в состоянии баланса<br class="wide-break"> и поддерживать его в пути.</span>
+                    </li>
+                    <li>
+                      <span class="step-icon"><svg class="icon" aria-hidden="true"><use href="#i-spark"/></svg></span>
+                      <span><strong>В процессе возникают события —</strong><br> смена погоды, препятствия, особые зоны, которые делают путешествие живым и разнообразным.</span>
+                    </li>
+                    <li>
+                      <span class="step-icon"><svg class="icon" aria-hidden="true"><use href="#i-target"/></svg></span>
+                      <span><strong>Вы выполняете простые упражнения,</strong> которые помогают вернуть равновесие и продолжить путь.</span>
+                    </li>
+                  </ul>
                 </div>
-              </div>
-            </div>
-
-            <div class="tab-panel" id="panel-events" role="tabpanel" aria-labelledby="tab-events" tabindex="0" hidden>
-              <div class="panel-copy">
-                <h3>Путешествие меняется по ходу игры</h3>
-                <p>По пути корабль встречает разные условия. Они помогают практиковать саморегуляцию, когда вокруг что-то меняется.</p>
-                <ul class="steps">
-                  <li><span class="step-icon"><svg class="icon" aria-hidden="true"><use href="#i-wind"/></svg></span><span><strong>Смена погоды</strong><br> Волны и освещение меняют настроение морского пути.</span></li>
-                  <li><span class="step-icon"><svg class="icon" aria-hidden="true"><use href="#i-spark"/></svg></span><span><strong>Препятствия</strong><br> На знакомом маршруте появляются новые участки.</span></li>
-                  <li><span class="step-icon"><svg class="icon" aria-hidden="true"><use href="#i-moon"/></svg></span><span><strong>Особые зоны</strong><br> Спокойные отрезки пути позволяют вернуться к привычному ритму.</span></li>
-                </ul>
-              </div>
-              <div class="game-view event-view">
-                <img class="game-art" src="assets/event.webp" width="1536" height="864" alt="Корабль проходит между скалами, пока над морем собирается гроза" loading="lazy">
-              </div>
-            </div>
-
-            <div class="tab-panel" id="panel-exercise" role="tabpanel" aria-labelledby="tab-exercise" tabindex="0" hidden>
-              <div class="panel-copy">
-                <h3>Упражнения на&nbsp;релаксацию во&nbsp;время пути</h3>
-                <p>Упражнения встроены в путешествие. Визуальные подсказки помогают сосредоточиться на дыхании и замечать изменения в своём состоянии.</p>
-                <ul class="steps">
-                  <li><span class="step-icon"><svg class="icon" aria-hidden="true"><use href="#i-pulse"/></svg></span><span><strong>Найдите удобный ритм</strong><br> Следите за плавным движением светового круга.</span></li>
-                  <li><span class="step-icon"><svg class="icon" aria-hidden="true"><use href="#i-target"/></svg></span><span><strong>Вернитесь к путешествию</strong><br> После упражнения корабль продолжает путь.</span></li>
-                </ul>
-              </div>
-              <div class="game-view exercise-view">
-                <img class="game-art" src="assets/game.webp" width="1536" height="864" alt="" loading="lazy">
-                <div class="breathing" data-breathing>
-                  <div class="breath-orbit" aria-hidden="true"><span></span></div>
-                  <p class="breath-label" aria-live="polite">Дыхательное упражнение</p>
-                  <button class="pill breath-button" type="button">Начать</button>
-                </div>
-              </div>
-            </div>
-
-            <div class="tab-panel" id="panel-desk" role="tabpanel" aria-labelledby="tab-desk" tabindex="0" hidden>
-              <div class="panel-copy">
-                <h3>Панель управления для&nbsp;специалиста</h3>
-                <p>Панель помогает специалисту сопровождать тренировку и наблюдать за сигналами во время путешествия.</p>
-                <ul class="steps">
-                  <li><span class="step-icon"><svg class="icon" aria-hidden="true"><use href="#i-screen"/></svg></span><span><strong>Настройка перед сеансом</strong><br> Специалист подготавливает оборудование и выбирает сценарий.</span></li>
-                  <li><span class="step-icon"><svg class="icon" aria-hidden="true"><use href="#i-chart"/></svg></span><span><strong>Наблюдение за тренировкой</strong><br> Данные доступны в ходе сеанса для обсуждения со специалистом.</span></li>
-                </ul>
-              </div>
-              <div class="game-view dashboard" role="img" aria-label="Схема панели специалиста с графиками дыхания и сердечного ритма">
-                <div class="dashboard-head" aria-hidden="true"><strong>Панель специалиста</strong><span>Пример</span></div>
-                <div class="dashboard-grid" aria-hidden="true">
-                  <div class="metric"><div><svg class="icon"><use href="#i-pulse"/></svg>Дыхание</div>
-                    <svg class="metric-plot" viewBox="0 0 220 70" preserveAspectRatio="none"><path d="M0 49c15 0 19-30 34-30 19 0 19 37 38 37s25-36 42-36 24 31 40 31 22-37 40-37 19 22 26 27"/></svg>
-                  </div>
-                  <div class="metric"><div><svg class="icon"><use href="#i-heart"/></svg>Сердечный ритм</div>
-                    <svg class="metric-plot" viewBox="0 0 220 70" preserveAspectRatio="none"><path d="M0 46h18l5-9 7 12 8-33 8 43 8-13h30l5-9 7 12 8-32 8 41 8-12h31l5-9 7 12 8-34 8 43 8-12h23"/></svg>
+                <div class="game-view" aria-label="Иллюстрация игрового процесса" data-scene>
+                  <img class="game-art" src="assets/game.webp" width="1536" height="864" alt="Светящийся корабль движется по ночному морю к лучу на горизонте" loading="lazy">
+                  <button class="scene-toggle" type="button" aria-label="Приостановить анимацию">
+                    <svg class="icon scene-pause" aria-hidden="true"><use href="#i-pause"/></svg>
+                    <svg class="icon scene-play" aria-hidden="true"><use href="#i-play"/></svg>
+                  </button>
+                  <svg class="route" viewBox="0 0 126 22" aria-hidden="true">
+                    <path d="M7 11h112"/><circle cx="7" cy="11" r="3.7"/><circle cx="56" cy="11" r="3.7"/>
+                    <circle cx="119" cy="11" r="3.7"/><path class="route-current" d="m91 4.5 6.5 6.5-6.5 6.5-6.5-6.5Z"/>
+                  </svg>
+                  <div class="signal" aria-hidden="true">
+                    <svg viewBox="0 0 140 36"><path d="M2 23c17 3 25-20 43-17 16 3 23 22 40 21 14-1 21-13 33-13 7 0 13 2 20 7"/><circle cx="102" cy="21" r="3.3"/></svg>
+                    <span class="signal-track"><span></span></span>
                   </div>
                 </div>
-                <div class="dashboard-foot" aria-hidden="true"><span></span><span></span><span></span></div>
+              </div>
+
+              <div class="tab-panel" id="panel-events" role="tabpanel" aria-labelledby="tab-events" tabindex="0" hidden>
+                <div class="panel-copy">
+                  <h3>Путешествие меняется по ходу игры</h3>
+                  <p>По пути корабль встречает разные условия. Они помогают практиковать саморегуляцию, когда вокруг что-то меняется.</p>
+                  <ul class="steps">
+                    <li><span class="step-icon"><svg class="icon" aria-hidden="true"><use href="#i-wind"/></svg></span><span><strong>Смена погоды</strong><br> Волны и освещение меняют настроение морского пути.</span></li>
+                    <li><span class="step-icon"><svg class="icon" aria-hidden="true"><use href="#i-spark"/></svg></span><span><strong>Препятствия</strong><br> На знакомом маршруте появляются новые участки.</span></li>
+                    <li><span class="step-icon"><svg class="icon" aria-hidden="true"><use href="#i-moon"/></svg></span><span><strong>Особые зоны</strong><br> Спокойные отрезки пути позволяют вернуться к привычному ритму.</span></li>
+                  </ul>
+                </div>
+                <div class="game-view event-view">
+                  <img class="game-art" src="assets/event.webp" width="1536" height="864" alt="Корабль проходит между скалами, пока над морем собирается гроза" loading="lazy">
+                </div>
+              </div>
+
+              <div class="tab-panel" id="panel-exercise" role="tabpanel" aria-labelledby="tab-exercise" tabindex="0" hidden>
+                <div class="panel-copy">
+                  <h3>Упражнения на&nbsp;релаксацию во&nbsp;время пути</h3>
+                  <p>Упражнения встроены в путешествие. Визуальные подсказки помогают сосредоточиться на дыхании и замечать изменения в своём состоянии.</p>
+                  <ul class="steps">
+                    <li><span class="step-icon"><svg class="icon" aria-hidden="true"><use href="#i-pulse"/></svg></span><span><strong>Найдите удобный ритм</strong><br> Следите за плавным движением светового круга.</span></li>
+                    <li><span class="step-icon"><svg class="icon" aria-hidden="true"><use href="#i-target"/></svg></span><span><strong>Вернитесь к путешествию</strong><br> После упражнения корабль продолжает путь.</span></li>
+                  </ul>
+                </div>
+                <div class="game-view exercise-view">
+                  <img class="game-art" src="assets/game.webp" width="1536" height="864" alt="" loading="lazy">
+                  <div class="breathing" data-breathing>
+                    <div class="breath-orbit" aria-hidden="true"><span></span></div>
+                    <p class="breath-label" aria-live="polite">Дыхательное упражнение</p>
+                    <button class="pill breath-button" type="button">Начать</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="tab-panel" id="panel-desk" role="tabpanel" aria-labelledby="tab-desk" tabindex="0" hidden>
+                <div class="panel-copy">
+                  <h3>Панель управления для&nbsp;специалиста</h3>
+                  <p>Панель помогает специалисту сопровождать тренировку и наблюдать за сигналами во время путешествия.</p>
+                  <ul class="steps">
+                    <li><span class="step-icon"><svg class="icon" aria-hidden="true"><use href="#i-screen"/></svg></span><span><strong>Настройка перед сеансом</strong><br> Специалист подготавливает оборудование и выбирает сценарий.</span></li>
+                    <li><span class="step-icon"><svg class="icon" aria-hidden="true"><use href="#i-chart"/></svg></span><span><strong>Наблюдение за тренировкой</strong><br> Данные доступны в ходе сеанса для обсуждения со специалистом.</span></li>
+                  </ul>
+                </div>
+                <div class="game-view dashboard" role="img" aria-label="Схема панели специалиста с графиками дыхания и сердечного ритма">
+                  <div class="dashboard-head" aria-hidden="true"><strong>Панель специалиста</strong><span>Пример</span></div>
+                  <div class="dashboard-grid" aria-hidden="true">
+                    <div class="metric"><div><svg class="icon"><use href="#i-pulse"/></svg>Дыхание</div>
+                      <svg class="metric-plot" viewBox="0 0 220 70" preserveAspectRatio="none"><path d="M0 49c15 0 19-30 34-30 19 0 19 37 38 37s25-36 42-36 24 31 40 31 22-37 40-37 19 22 26 27"/></svg>
+                    </div>
+                    <div class="metric"><div><svg class="icon"><use href="#i-heart"/></svg>Сердечный ритм</div>
+                      <svg class="metric-plot" viewBox="0 0 220 70" preserveAspectRatio="none"><path d="M0 46h18l5-9 7 12 8-33 8 43 8-13h30l5-9 7 12 8-32 8 41 8-12h31l5-9 7 12 8-34 8 43 8-12h23"/></svg>
+                    </div>
+                  </div>
+                  <div class="dashboard-foot" aria-hidden="true"><span></span><span></span><span></span></div>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div class="carousel-dots" role="group" aria-label="Выбор вкладки">
-            <button type="button" aria-label="Игровой процесс" aria-pressed="true"></button>
-            <button type="button" aria-label="Игровые события" aria-pressed="false"></button>
-            <button type="button" aria-label="Игровые упражнения" aria-pressed="false"></button>
-            <button type="button" aria-label="Панель управления" aria-pressed="false"></button>
+            <div class="carousel-dots" role="group" aria-label="Выбор вкладки">
+              <button type="button" aria-label="Игровой процесс" aria-pressed="true"></button>
+              <button type="button" aria-label="Игровые события" aria-pressed="false"></button>
+              <button type="button" aria-label="Игровые упражнения" aria-pressed="false"></button>
+              <button type="button" aria-label="Панель управления" aria-pressed="false"></button>
+            </div>
           </div>
         </div>
       </section>
